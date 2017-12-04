@@ -5,7 +5,6 @@
 #include <Windows.h>
 #include <stdlib.h>
 #include "scorelist.h"
-
 int main() {
 	return 1;
 }

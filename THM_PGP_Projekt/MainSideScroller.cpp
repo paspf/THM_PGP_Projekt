@@ -7,8 +7,10 @@
 #include "scorelist.h"
 #include <dos.h>
 #include <time.h>
-#define WIDTH 70
+#include <sys/utime.h>
+#define WIDTH 50
 #define HEIGHT 15
+
 
 //
 struct tile {
@@ -17,28 +19,19 @@ struct tile {
 };
 
 //Zeichnet das "Pixelarray" und begrenzt die zeit 
-double draw(tile pixel[][HEIGHT]) {
-
-	clock_t e;
-	clock_t s = clock() / CLOCKS_PER_SEC;
+void draw(tile pixel[][HEIGHT]) {
 	system("cls");
 	for (int x = 0; x < HEIGHT; x++) {
 		for (int y = 0; y < WIDTH; y++) {
 			if (pixel[y][x].isWall)putchar('#');
 			else if (pixel[y][x].isPlayer)putchar('$');
-			else putchar(' ');
+			else putchar('.');
 		}
 
 		putchar('\n');
 	}
 
-	e = clock() / CLOCKS_PER_SEC;
-	double dt = (double)(s - e) * 100;
-	//printf(" Draw dt : %f", dt);
-	//if (dt < 9) Sleep(10 - dt);
-	//printf("   %f", 10 - dt);
-
-	return difftime(clock() / CLOCKS_PER_SEC, s);
+	
 }
 
 
@@ -47,27 +40,41 @@ int main()
 	tile spielfeld[WIDTH][HEIGHT];
 
 	//Initialisierung des Spielers(testweise)
-	int a = 0;
-	spielfeld[3][a].isPlayer = true;
-	tile* pPointer = &spielfeld[3][a];
-	clock_t p = clock();
-	clock_t e = clock();
+	float a = 0;
+	spielfeld[(int)a][3].isPlayer = true;
+	tile* pPointer = &spielfeld[(int)a][3];
+	
+	
+	unsigned long deltastack = 0;
+	float average;
+	int samples = 0;
+	
 	while (true) {
 
-		p = clock();
-		draw(spielfeld);
-		e = clock();
-		double dt = (e - p);
-		//Sleep(100);
-		printf("%.20f", dt);
+		unsigned long start = GetTickCount();
 		
-		a += 1;
-		a %= HEIGHT;
+
+		draw(spielfeld);
+		
+		a += 3;
+		if (a >= WIDTH)a = 0;
 
 
 		pPointer->isPlayer = false;
-		pPointer = &spielfeld[3][a];
+		pPointer = &spielfeld[(int)std::floor(a)][3];
 		pPointer->isPlayer = true;
+
+		unsigned long end = GetTickCount() - start;
+		deltastack += end;
+		if (samples++ == 10) {
+			average = (float)deltastack / 10.0f;
+			deltastack = 0;
+			samples = 0;
+			printf("%.7fs", average/1000);
+			//Sleep(1000);
+		}
+		
+		
 	}
 
 	getchar();

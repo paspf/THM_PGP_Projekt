@@ -112,10 +112,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="MainSideScroller.cpp" />
+    <ClCompile Include="ObstacleGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="eingabe.h" />
-    <ClInclude Include="hindernisGen.h" />
     <ClInclude Include="scorelist.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

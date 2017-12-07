@@ -6,7 +6,8 @@
 #include <stdlib.h>														// bringt Standardfunktionen mit
 #include <time.h>														// für Zufallszahlen benötigt
 #include "scorelist.h"
-#include "ObstacleGenerator.h"
+//#include "ObstacleGenerator.h"
+#include "Obstacle.h"
 
 /*	init
 	nimmt für das Programm
@@ -14,12 +15,13 @@
 */
 void init() {
 	srand(time(NULL)*clock());											// Initialisiert den Zufallszahlengenerator
-
+	
 }
 
 
 
 int main() {
 	init();
-	return 1;
+	//runObstacleGen();
+	return 0;
 }

@@ -18,15 +18,15 @@
     <ClCompile Include="MainSideScroller.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="ObstacleGenerator.h">
-      <Filter>Headerdateien</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="eingabe.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="scorelist.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="Obstacle.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

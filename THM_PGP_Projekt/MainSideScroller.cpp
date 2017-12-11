@@ -6,8 +6,22 @@
 #include <stdlib.h>														// bringt Standardfunktionen mit
 #include <time.h>														// für Zufallszahlen benötigt
 #include "scorelist.h"
-#include "graphics.h"
+//#include "ObstacleGenerator.h"
+#include "Obstacle.h"
+
+/*	init
+	nimmt für das Programm
+	benötigte initialiserungen vor
+*/
+void init() {
+	srand(time(NULL)*clock());											// Initialisiert den Zufallszahlengenerator
+	
+}
+
+
 
 int main() {
+	init();
+	//runObstacleGen();
 	return 0;
 }

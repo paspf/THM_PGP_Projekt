@@ -11,6 +11,10 @@ struct hinDat {
 };
 hinDat *hd;
 
+void hindernisV3Handler(int);
+void hindernis();
+void hinClr();
+
 void hindernisGen() {
 	system("cls");														// Systemaufruf zum säubern des Fensters, teil von windows.h
 	hd = (hinDat*)malloc(hinheight * sizeof(hinDat));					// reserviere Speicherplatz für die Hindernisebenen

@@ -6,6 +6,8 @@
 #include <stdlib.h>														// bringt Standardfunktionen mit
 #include <time.h>														// für Zufallszahlen benötigt
 #include "scorelist.h"
+#include "graphics.h"
+
 int main() {
-	return 1;
+	return 0;
 }

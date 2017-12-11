@@ -4,14 +4,13 @@
 #define _MAX_NAME_LENGTH 11
 #define _LIST_ENTRYS 10
 
-
 //Spielereintrag mit Spielernamen und zugehörigen Punktestand
 struct user {
 	int score;
 	char name[_MAX_NAME_LENGTH + 1];
 };
 
-//Liest die Punktestände in Reihenfolge in scores ein
+//reads scores in decreasing order
 void readScore(FILE* fp, int *scores) {
 
 	char temp[BUFFERSIZE];
@@ -37,7 +36,7 @@ void readScore(FILE* fp, int *scores) {
 
 }
 
-//Liest Spielernamen in List ein
+//reads playernames into list
 void readNames(FILE * fp, user  list[]) {
 
 	//File Pointer auf anfang der Datei setzen
@@ -90,7 +89,7 @@ void readNames(FILE * fp, user  list[]) {
 }
 
 
-void sortEntrys(user list[]) {
+inline void sortEntrys(user list[]) {
 	//Bubblesort
 	for (int i = _LIST_ENTRYS + 1; i > 1; i--) {
 		for (int a = 0; a < i - 1; a++) {
@@ -105,7 +104,7 @@ void sortEntrys(user list[]) {
 
 }
 
-//löscht alte score liste und erstellt neue auf basis der übergebenen Liste
+//deletes old scorelist and creates a new one on he basis of the new list
 void saveToFile(FILE* fp, user list[]) {
 	fclose(fp);
 	remove("scoreboard.txt");

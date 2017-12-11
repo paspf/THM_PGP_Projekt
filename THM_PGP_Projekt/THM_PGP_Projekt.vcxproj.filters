@@ -29,5 +29,8 @@
     <ClInclude Include="scorelist.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="graphics.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

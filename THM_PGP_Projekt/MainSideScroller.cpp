@@ -6,7 +6,6 @@
 #include <stdlib.h>														// bringt Standardfunktionen mit
 #include <time.h>														// für Zufallszahlen benötigt
 #include "scorelist.h"
-//#include "ObstacleGenerator.h"
 #include "Obstacle.h"
 
 /*	init

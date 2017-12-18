@@ -116,6 +116,36 @@ void drawRect(int x1, int y1, int x2, int y2, WORD col) {
 		}
 	}
 }
+
+/* drawUIntHandler
+   calculates next digit as char
+*/
+void drawUIntHandler(unsigned int *number, char dezDigit[], int *digit) {
+	int dezDigitIs = *number % 10;
+	*number = *number / 10;
+	dezDigit[*digit] = dezDigitIs + 48;
+	printf("Digit %i: %c  ", *digit, dezDigit[*digit]);
+	*digit = *digit + 1;
+}
+
+/* drawUInt(startPosX, startPosY, NumberToDraw)
+   draw unsigned integer to command line Buffer
+*/
+void drawUInt(int x, int y, unsigned int num) {
+	char dezDigit[20] = { '0' };
+	int digit = 0;
+
+	while (num != 0) {
+		drawUIntHandler(&num, dezDigit, &digit);
+	}
+
+	for (int i = 19; i > 0; i--) {
+		if (dezDigit[i] >= '0' && dezDigit[i] <= '9' ) {
+			putPixel(x, y, dezDigit[i], BACKGROUND_GREEN | FOREGROUND_BLUE);
+			x++;
+		}
+	}
+}
 //never to be used
 int example() {
 	initScreen();

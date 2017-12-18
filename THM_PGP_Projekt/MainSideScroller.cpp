@@ -1,4 +1,6 @@
 
+#define SCROLLX 100														// width of the scrollObjects Array
+
 #include <stdio.h>														// bringt Ein/Ausgabefunktionen mit
 #include <algorithm>
 #include <ctype.h>

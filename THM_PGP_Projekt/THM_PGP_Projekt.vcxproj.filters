@@ -29,5 +29,11 @@
     <ClInclude Include="Obstacle.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="graphics.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="gameplay.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -115,6 +115,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="eingabe.h" />
+    <ClInclude Include="gameplay.h" />
+    <ClInclude Include="graphics.h" />
     <ClInclude Include="Obstacle.h" />
     <ClInclude Include="scorelist.h" />
   </ItemGroup>

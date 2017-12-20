@@ -139,7 +139,7 @@ void drawUInt(int x, int y, unsigned int num) {
 		drawUIntHandler(&num, dezDigit, &digit);
 	}
 
-	for (int i = 19; i > 0; i--) {
+	for (int i = 19; i >= 0; i--) {
 		if (dezDigit[i] >= '0' && dezDigit[i] <= '9' ) {
 			putPixel(x, y, dezDigit[i], BACKGROUND_GREEN | FOREGROUND_BLUE);
 			x++;

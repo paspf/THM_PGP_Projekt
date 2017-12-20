@@ -3,6 +3,8 @@ struct gameplayData {
 	int movecnt;
 	int scrollObjects[SCROLLX][HEIGHT] = { 0 };
 	unsigned int score = 0;
+	unsigned int lvl = 1;
+	unsigned int lvlScroolSpeed = 0;
 };
 gameplayData gpd;
 
@@ -59,12 +61,58 @@ void scrollobjectsToPixelBuffer() {
 	}
 }
 
+void levelDecider() {
+	/*
+	
+	if (gpd.score > 100) {
+		gpd.lvl = 2;
+		gpd.lvlScroolSpeed = 50;
+	}
+	else if(gpd.score > 200) {
+		gpd.lvl = 3;
+		gpd.lvlScroolSpeed = 80;
+	} */
+	
+	/*
+	
+	*/
+	switch (gpd.score) {
+	case 0:
+		gpd.lvl = 1;
+		gpd.lvlScroolSpeed = 80;
+		break;
+	case 200:
+		gpd.lvl = 2;
+		gpd.lvlScroolSpeed = 50;
+		break;
+	case 500:
+		gpd.lvl = 3;
+		gpd.lvlScroolSpeed = 35;
+		break;
+	default:
+		// Do nothing;
+		break;
+	}
+}
+
 void drawScore() {
 
 }
 
+void drawIngameInformation() {
+	drawUInt(0, 0, gpd.score);			// draw Score
+	putPixel(21, 0, 'l', BACKGROUND_GREEN | FOREGROUND_BLUE);
+	putPixel(22, 0, 'v', BACKGROUND_GREEN | FOREGROUND_BLUE);
+	putPixel(23, 0, 'l', BACKGROUND_GREEN | FOREGROUND_BLUE);
+	drawUInt(25, 0, gpd.lvl);
+}
+
 void game() {
 	gpd.movecnt++;
+	if (gpd.score == 300) {
+		gpd.movecnt = gpd.movecnt;
+	}
+	levelDecider();
 	gpd.score++;
 	if (gpd.movecnt == 30) {
 		gpd.movecnt = 0;
@@ -78,7 +126,7 @@ void game() {
 	}
 	scrollobjectsToPixelBuffer();
 	scrollObjectsMovement();
-	drawUInt(0, 0, gpd.score);
+	drawIngameInformation();
 	rasterize(screenInfo.bufferHandle, screenInfo.bufferSize,
 		screenInfo.bufferCoord, screenInfo.writeCoord);
 
@@ -90,7 +138,7 @@ void gameTimer() {
 	gpd.movecnt = 29;
 	while (true) {
 		timer1.diff = clock() - timer1.before;
-		if (timer1.diff >= 50) {
+		if (timer1.diff >= gpd.lvlScroolSpeed) {
 			
 			game();
 		}

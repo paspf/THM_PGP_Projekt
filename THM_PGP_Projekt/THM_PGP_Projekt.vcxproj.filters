@@ -20,9 +20,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="eingabe.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
     <ClInclude Include="scorelist.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
@@ -33,6 +30,12 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="gameplay.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="input.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="player.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

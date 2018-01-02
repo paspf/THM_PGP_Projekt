@@ -124,7 +124,7 @@ void drawUIntHandler(unsigned int *number, char dezDigit[], int *digit) {
 	int dezDigitIs = *number % 10;
 	*number = *number / 10;
 	dezDigit[*digit] = dezDigitIs + 48;
-	printf("Digit %i: %c  ", *digit, dezDigit[*digit]);
+	//printf("Digit %i: %c  ", *digit, dezDigit[*digit]);
 	*digit = *digit + 1;
 }
 

@@ -1,10 +1,10 @@
 #pragma once
-#include "eingabe.h"
+#include "input.h"
 #pragma warning (disable : 4996)
 #define _MAX_NAME_LENGTH 11
 #define _LIST_ENTRYS 10
 
-//Spielereintrag mit Spielernamen und zugehörigen Punktestand
+//user entry with name and score
 struct user {
 	int score;
 	char name[_MAX_NAME_LENGTH + 1];
@@ -39,7 +39,7 @@ void readScore(FILE* fp, int *scores) {
 //reads playernames into list
 void readNames(FILE * fp, user  list[]) {
 
-	//File Pointer auf anfang der Datei setzen
+	//seek filepointer to the beginning
 	fseek(fp, 0, SEEK_SET);
 
 	char buff[BUFFERSIZE];
@@ -48,7 +48,7 @@ void readNames(FILE * fp, user  list[]) {
 	char c;
 
 	int secCounter = 0;
-	//2 ersten Zeilen überspringen
+	//ignore first 2 rows
 	if (!feof(fp)) {
 		fgets(waste, BUFFERSIZE, fp);
 		fgets(waste, BUFFERSIZE, fp);
@@ -60,16 +60,13 @@ void readNames(FILE * fp, user  list[]) {
 		for (int i = 0; !feof(fp) && i < _MAX_NAME_LENGTH + 1; i++) {
 			c = fgetc(fp);
 			if (isalnum(c) || c == ' ') buff[i] = c;
-			// | als Trennzeichen Zwischen Namen und Spielstand
+			// | as seperator between name and scores
 			if (c == '|' || secCounter >= _LIST_ENTRYS + 1) {
-				//buff als Nullterminierter string( '|' wird überschrieben
-				//buff[i] = '\0';
 				std::copy(buff, buff + _MAX_NAME_LENGTH, list[secCounter].name);		// Kopiert Elemente im Bereich
 
-				//list[secCounter].name[_MAX_NAME_LENGTH] = '\0';
 
 				secCounter++;
-				//Buff mit leer überschreiben
+				//overwrite buff with empty space
 				for (int i = 0; i < _MAX_NAME_LENGTH; i++) {
 					buff[i] = ' ';
 				}
@@ -78,7 +75,7 @@ void readNames(FILE * fp, user  list[]) {
 			}
 
 		}
-		//Bis zur nächsten zeile weiterlesen
+		//read until next line
 		while (c != '\n' && !feof(fp)) {
 			c = fgetc(fp);
 		}
@@ -166,64 +163,62 @@ void saveScoreToFile(int score)
 
 	user* list;
 
-	//Eingabe Ausgabe Buffer
+	//input output buffer
 	char singleLine[BUFFERSIZE];
 	char e[BUFFERSIZE];
 
 
-	//Öffne Datei
 	FILE * fPointer;
 	fPointer = fopen("scoreboard.txt", "r+");
 
-	//Gibt es die Datei schon?!
 	if (fPointer <= 0) {
-		//wenn nicht Erstell neue Datei mit dem Namen und Format 
-		// TODO:! Formatierung
+		//if file doesnt exist create new
 		fPointer = fopen("scoreboard.txt", "w+");
 		fputs("#########\nName ", fPointer);
 		for (int i = 0; i < _MAX_NAME_LENGTH - 4; i++) {
 			fputc(' ', fPointer);
 		}
 		fputs("Score \n", fPointer);
-		printf("Score  %i\n", score);
+		printf("\nScore  %i\n", score);
 		printf("Gib deine Namen ein(max 10 Zeichen): ");
 
-		//Spielername mit gesetzter Weite
-		eingabeFixed(e, _MAX_NAME_LENGTH);
+		//player name
+		inputFixed(e, _MAX_NAME_LENGTH);
 
 
 
 		printf("\n");
-		//Speichern des Namens in Datei
+		//save name to file
 		fputs(e, fPointer);
-		//Speichern des Scores
+		//save score
 		itoa(score, e, 10);
 		fputs(e, fPointer);
+		fputs("\n", fPointer);
 		system("cls");
 
 	}
 	else {
-		printf("Score  %i\n", score);
+		printf("\nScore  %i\n", score);
 		printf("Gib deine Namen ein(max 10 Zeichen): ");
 
 		fseek(fPointer, 0, SEEK_END);
-		//fputc('\n', fPointer);
-		//Spielername mit gesetzter Weite
-		eingabeFixed(e, _MAX_NAME_LENGTH);
+		//player name
+		inputFixed(e, _MAX_NAME_LENGTH);
 
 		printf("\n");
-		//Speichern des Namens in Datei
+		//save name
 		fputs(e, fPointer);
-		//Speichern des Scores
+		//save score
 		itoa(score, e, 10);
 		fputs(e, fPointer);
+		fputs("\n", fPointer);
 		system("cls");
 
 
 	}
 	rewind(fPointer);
 
-	//Ausgabe der Scoreliste
+	//ouput scorelist to screen
 	while (!feof(fPointer)) {
 
 		fgets(singleLine, BUFFERSIZE, fPointer);
@@ -232,8 +227,6 @@ void saveScoreToFile(int score)
 	}
 
 	fclose(fPointer);
-	//getchar();
-
 }
 
 void showScorelist() {

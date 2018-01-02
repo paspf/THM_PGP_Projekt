@@ -1,10 +1,13 @@
 #pragma once
+#include "player.h"
+#include <math.h>
 struct gameplayData {
 	int movecnt;
 	int scrollObjects[SCROLLX][HEIGHT] = { 0 };
 	unsigned int score = 0;
 	unsigned int lvl = 1;
 	unsigned int lvlScroolSpeed = 0;
+	bool inGame;
 };
 gameplayData gpd;
 
@@ -13,22 +16,56 @@ struct timerG {
 	clock_t diff;
 	u_int obstacleTimer;
 	u_int obstacleTime = 30;
+	u_int sec;
 };
 timerG timer1;
+
+void resetGameplayData() {
+	gpd.inGame = true;
+	gpd.lvlScroolSpeed = 0;
+	gpd.lvl = 1;
+	gpd.score = 0;
+	for (int x = 0; x < SCROLLX; x++) {
+		for (int y = 0; y < HEIGHT; y++) {
+			gpd.scrollObjects[x][y] = 0;
+		}
+	}
+}
 
 /* scrollObjectsMovement
    perform left shift (x) of all objects
 */
 void scrollObjectsMovement() {
-	for (int i = 1; i < SCROLLX; i++) {
+	/*for (int i = 1; i < SCROLLX; i++) {
 		for (int j = 0; j < HEIGHT; j++) {
 			gpd.scrollObjects[i-1][j] = gpd.scrollObjects[i][j];
 		}
+	}*/
+	int dt = gpd.lvlScroolSpeed;
+	for (int i = 1; i < SCROLLX; i++) {
+		for (int j = 0; j < HEIGHT; j++) {
+			if (i + dt < SCROLLX) {
+				gpd.scrollObjects[i][j] = gpd.scrollObjects[(int)(i + dt)][j];
+			}
+		}
 	}
-	// fill new y line with emptyness
-	for (int i = 0; i < HEIGHT; i++) {
-		gpd.scrollObjects[SCROLLX - 1][i] = 0;
-	}
+
+
+		// fill new y line with emptyness
+		/*for (int i = 0; i < HEIGHT; i++) {
+			gpd.scrollObjects[SCROLLX - 1][i] = 0;
+			gpd.scrollObjects[SCROLLX - 2][i] = 0;
+			gpd.scrollObjects[SCROLLX - 3][i] = 0;
+			gpd.scrollObjects[SCROLLX - 4][i] = 0;
+			gpd.scrollObjects[SCROLLX - 5][i] = 0;
+			gpd.scrollObjects[SCROLLX - 6][i] = 0;
+		}*/
+		for (int i = 0; i < HEIGHT; i++) {
+			for (int x = 1; x <= dt; x++) {
+				gpd.scrollObjects[SCROLLX - x][i] = 0;
+
+			}
+		}
 }
 
 /* drawToScrollobjectsFilled
@@ -79,16 +116,25 @@ void levelDecider() {
 	switch (gpd.score) {
 	case 0:
 		gpd.lvl = 1;
-		gpd.lvlScroolSpeed = 80;
+		gpd.lvlScroolSpeed = 1;
 		break;
 	case 200:
 		gpd.lvl = 2;
-		gpd.lvlScroolSpeed = 50;
+		gpd.lvlScroolSpeed = 2;
 		break;
 	case 500:
 		gpd.lvl = 3;
-		gpd.lvlScroolSpeed = 35;
+		gpd.lvlScroolSpeed = 3;
 		break;
+	case 900:
+		gpd.lvl = 4;
+		gpd.lvlScroolSpeed = 4;
+		break;
+	case 10000:
+		gpd.lvl =54;
+		gpd.lvlScroolSpeed = 100;
+		break;
+
 	default:
 		// Do nothing;
 		break;
@@ -107,7 +153,7 @@ void drawIngameInformation() {
 	drawUInt(25, 0, gpd.lvl);
 }
 
-void game() {
+void game(double t) {
 	gpd.movecnt++;
 	if (gpd.score == 300) {
 		gpd.movecnt = gpd.movecnt;
@@ -126,22 +172,31 @@ void game() {
 	}
 	scrollobjectsToPixelBuffer();
 	scrollObjectsMovement();
+	updatePlayer(t / 10000000);
+	if (checkDead()) {
+		gpd.inGame = false;
+	}
 	drawIngameInformation();
+	drawPlayer();
 	rasterize(screenInfo.bufferHandle, screenInfo.bufferSize,
 		screenInfo.bufferCoord, screenInfo.writeCoord);
-
+	
 	timer1.before = clock();
 }
 
 void gameTimer() {
+	gpd.inGame = true;
 	timer1.before = clock();
 	gpd.movecnt = 29;
-	while (true) {
-		timer1.diff = clock() - timer1.before;
-		if (timer1.diff >= gpd.lvlScroolSpeed) {
-			
-			game();
+	double t = 0;
+	timer1.sec = 0;
+	while (gpd.inGame) {
+		timer1.diff = (clock() - timer1.before);
+		t += timer1.diff;
+		timer1.sec += t;
+		if (t >= 10000000){
+		game(t);
+		t = 0;
 		}
-
 	}
 }

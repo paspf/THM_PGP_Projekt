@@ -11,6 +11,7 @@
 #include "scorelist.h"
 #include "Obstacle.h"
 #include "gameplay.h"
+#include "player.h"
 
 /*	init
 	nimmt für das Programm
@@ -20,18 +21,25 @@ void init() {
 	srand(time(NULL)*clock());											// Initialisiert den Zufallszahlengenerator
 	initScreen();
 	clearScreen(BACKGROUND_GREEN | FOREGROUND_RED);
-	
+	initPlayer();
+	resetGameplayData();
 }
 
 
 
 int main() {
+	bool inGame = true;
+	HANDLE stdHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+	printf("Press any key to start, press Spacebar to jump");
+	getch();
 	init();
-	//example();
-	//game();
-	//gMovement();
-	//runObstacleGen();
-	gameTimer();
+	while (inGame) {
+		gameTimer();
+		//clearScreen(BACKGROUND_BLUE);
+		SetConsoleActiveScreenBuffer(stdHandle);
+		saveScoreToFile(gpd.score);
+		init();
+	}
 	_getch();
 	return 0;
 }

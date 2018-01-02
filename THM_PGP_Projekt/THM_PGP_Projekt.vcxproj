@@ -114,10 +114,11 @@
     <ClCompile Include="MainSideScroller.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="eingabe.h" />
+    <ClInclude Include="input.h" />
     <ClInclude Include="gameplay.h" />
     <ClInclude Include="graphics.h" />
     <ClInclude Include="Obstacle.h" />
+    <ClInclude Include="player.h" />
     <ClInclude Include="scorelist.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -35,7 +35,6 @@ int main() {
 	init();
 	while (inGame) {
 		gameTimer();
-		//clearScreen(BACKGROUND_BLUE);
 		SetConsoleActiveScreenBuffer(stdHandle);
 		saveScoreToFile(gpd.score);
 		init();

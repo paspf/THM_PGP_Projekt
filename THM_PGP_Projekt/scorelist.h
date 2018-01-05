@@ -227,6 +227,7 @@ void saveScoreToFile(int score)
 	}
 
 	fclose(fPointer);
+	convertList();
 }
 
 void showScorelist() {

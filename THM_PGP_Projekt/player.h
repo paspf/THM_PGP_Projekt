@@ -3,7 +3,7 @@
 #include "graphics.h"
 
 #define PLAYER_X 3
-#define PLAYER_GRAV .25f
+#define PLAYER_GRAV .2f
 
 struct player {
 	float y; 
@@ -33,8 +33,8 @@ void updatePlayer(float time) {
 		if (c == ' '&&!player.jump)jump();
 	}
 
-	player.y += player.dy * time;
-	player.dy += PLAYER_GRAV * time;
+	player.y += player.dy * time;				//s(t) = v * t
+	player.dy += PLAYER_GRAV * time;			//a(t) = g * t
 	if (player.y >= HEIGHT - 1){
 		player.y = HEIGHT - 1;
 		player.jump = false;

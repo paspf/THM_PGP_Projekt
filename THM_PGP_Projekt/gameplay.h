@@ -1,4 +1,11 @@
 #pragma once
+
+#define SCORE_DIFF 5
+#define SCORE_LVL1 50
+#define SCORE_LVL2 100
+#define SCORE_LVL3 150
+#define SCORE_LVL4 200
+
 #include "player.h"
 #include <math.h>
 struct gameplayData {
@@ -7,7 +14,10 @@ struct gameplayData {
 	unsigned int score = 0;
 	unsigned int lvl = 1;
 	unsigned int lvlScroolSpeed = 0;
+	short obstacleSpace;
+	short scoreDiff = 0;
 	bool inGame;
+	bool genObstacles = true;
 };
 gameplayData gpd;
 
@@ -36,11 +46,6 @@ void resetGameplayData() {
    perform left shift (x) of all objects
 */
 void scrollObjectsMovement() {
-	/*for (int i = 1; i < SCROLLX; i++) {
-		for (int j = 0; j < HEIGHT; j++) {
-			gpd.scrollObjects[i-1][j] = gpd.scrollObjects[i][j];
-		}
-	}*/
 	int dt = gpd.lvlScroolSpeed;
 	for (int i = 1; i < SCROLLX; i++) {
 		for (int j = 0; j < HEIGHT; j++) {
@@ -49,23 +54,12 @@ void scrollObjectsMovement() {
 			}
 		}
 	}
-
-
-		// fill new y line with emptyness
-		/*for (int i = 0; i < HEIGHT; i++) {
-			gpd.scrollObjects[SCROLLX - 1][i] = 0;
-			gpd.scrollObjects[SCROLLX - 2][i] = 0;
-			gpd.scrollObjects[SCROLLX - 3][i] = 0;
-			gpd.scrollObjects[SCROLLX - 4][i] = 0;
-			gpd.scrollObjects[SCROLLX - 5][i] = 0;
-			gpd.scrollObjects[SCROLLX - 6][i] = 0;
-		}*/
-		for (int i = 0; i < HEIGHT; i++) {
-			for (int x = 1; x <= dt; x++) {
-				gpd.scrollObjects[SCROLLX - x][i] = 0;
-
-			}
+	// fill new y line with emptyness
+	for (int i = 0; i < HEIGHT; i++) {
+		for (int x = 1; x <= dt; x++) {
+			gpd.scrollObjects[SCROLLX - x][i] = 0;
 		}
+	}
 }
 
 /* drawToScrollobjectsFilled
@@ -98,41 +92,40 @@ void scrollobjectsToPixelBuffer() {
 	}
 }
 
+/*	levelDecider
+	switches level depending on actual score
+*/
 void levelDecider() {
-	/*
-	
-	if (gpd.score > 100) {
-		gpd.lvl = 2;
-		gpd.lvlScroolSpeed = 50;
-	}
-	else if(gpd.score > 200) {
-		gpd.lvl = 3;
-		gpd.lvlScroolSpeed = 80;
-	} */
-	
-	/*
-	
-	*/
 	switch (gpd.score) {
 	case 0:
 		gpd.lvl = 1;
 		gpd.lvlScroolSpeed = 1;
+		gpd.obstacleSpace = 50;
+		gpd.genObstacles = true;
 		break;
-	case 200:
+	case SCORE_LVL1:
 		gpd.lvl = 2;
 		gpd.lvlScroolSpeed = 2;
+		gpd.obstacleSpace = 40;
+		gpd.genObstacles = true;
 		break;
-	case 500:
+	case SCORE_LVL2:
 		gpd.lvl = 3;
-		gpd.lvlScroolSpeed = 3;
+		gpd.lvlScroolSpeed = 2;
+		gpd.obstacleSpace = 30;
+		gpd.genObstacles = true;
 		break;
-	case 900:
+	case SCORE_LVL3:
 		gpd.lvl = 4;
-		gpd.lvlScroolSpeed = 4;
+		gpd.lvlScroolSpeed = 3;
+		gpd.obstacleSpace = 25;
+		gpd.genObstacles = true;
 		break;
-	case 10000:
-		gpd.lvl =54;
-		gpd.lvlScroolSpeed = 100;
+	case SCORE_LVL4:
+		gpd.lvl = 5;
+		gpd.lvlScroolSpeed = 5;
+		gpd.obstacleSpace = 15;
+		gpd.genObstacles = true;
 		break;
 
 	default:
@@ -141,49 +134,67 @@ void levelDecider() {
 	}
 }
 
-void drawScore() {
-
+/*	obstacleBreak
+	stops the obstacle generation if a new level is near
+*/
+void obstacleBreak() {
+	if (gpd.score == SCORE_LVL1 - SCORE_DIFF || gpd.score == SCORE_LVL2 - SCORE_DIFF || gpd.score == SCORE_LVL3 - SCORE_DIFF || gpd.score == SCORE_LVL4 - SCORE_DIFF) {
+		gpd.genObstacles = false;
+	}
 }
 
+/*	drawIngameInformation
+	Draws the ingame overlay
+*/
 void drawIngameInformation() {
-	drawUInt(0, 0, gpd.score);			// draw Score
+	drawUInt(0, 0, gpd.score);
 	putPixel(21, 0, 'l', BACKGROUND_GREEN | FOREGROUND_BLUE);
 	putPixel(22, 0, 'v', BACKGROUND_GREEN | FOREGROUND_BLUE);
 	putPixel(23, 0, 'l', BACKGROUND_GREEN | FOREGROUND_BLUE);
 	drawUInt(25, 0, gpd.lvl);
 }
 
+/*	game
+	main game execution
+*/
 void game(double t) {
 	gpd.movecnt++;
-	if (gpd.score == 300) {
-		gpd.movecnt = gpd.movecnt;
+	gpd.scoreDiff++;
+	if (gpd.scoreDiff >= 10) {
+		gpd.scoreDiff = 0;
+		levelDecider();
+		gpd.score++;
 	}
-	levelDecider();
-	gpd.score++;
-	if (gpd.movecnt == 30) {
+	obstacleBreak();
+	if (gpd.movecnt >= gpd.obstacleSpace) {
 		gpd.movecnt = 0;
-		runObstacleGen();
-		for (int i = 0; i < HINHEIGHT; i++) {
-			if (oO[i].scX1 != oO[i].scX2) {
-				drawToScrollobjectsFilled(oO[i].scX1, oO[i].scY, oO[i].scX2, oO[i].scY-1, 1);
+		if (gpd.genObstacles == true) {
+			runObstacleGen();
+			for (int i = 0; i < HINHEIGHT; i++) {
+				if (oO[i].scX1 != oO[i].scX2) {
+					drawToScrollobjectsFilled(oO[i].scX1, oO[i].scY, oO[i].scX2, oO[i].scY - 1, 1);
+				}
 			}
 		}
-
 	}
 	scrollobjectsToPixelBuffer();
 	scrollObjectsMovement();
 	updatePlayer(t / 10000000);
+
 	if (checkDead()) {
 		gpd.inGame = false;
 	}
+
 	drawIngameInformation();
 	drawPlayer();
-	rasterize(screenInfo.bufferHandle, screenInfo.bufferSize,
-		screenInfo.bufferCoord, screenInfo.writeCoord);
+	rasterize(screenInfo.bufferHandle, screenInfo.bufferSize, screenInfo.bufferCoord, screenInfo.writeCoord);
 	
 	timer1.before = clock();
 }
 
+/*	gameTimer
+	Continuously calls game
+*/
 void gameTimer() {
 	gpd.inGame = true;
 	timer1.before = clock();

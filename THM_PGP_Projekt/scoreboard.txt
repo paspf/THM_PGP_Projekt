@@ -1,12 +1,12 @@
 #########
 Name        Score
-           |217
-df         |153
-           |152
-           |146
-skdfh      |124
-ggfhg      |123
-           |123
-           |96
-           |92
-asdfg      |83
+           |204
+Heiner     |160
+Pascal     |108
+           |59
+           |58
+Heiner     |47
+TV         |26
+           |20
+Gonga      |16
+Pascal1    |14

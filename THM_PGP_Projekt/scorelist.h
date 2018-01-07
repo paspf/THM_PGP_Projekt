@@ -102,6 +102,7 @@ inline void sortEntrys(user list[]) {
 }
 
 //deletes old scorelist and creates a new one on he basis of the new list
+//on same basis as saveScoreToFile function
 void saveToFile(FILE* fp, user list[]) {
 	fclose(fp);
 	remove("scoreboard.txt");
@@ -113,7 +114,7 @@ void saveToFile(FILE* fp, user list[]) {
 	}
 	fputs("Score\n", fp);
 	for (int i = 0; i < 10; i++) {
-		if (list[i].name == '\0' || list[i].score < 0)break;
+		if (list[i].name == "\0" || list[i].name == "          " || list[i].score <= 0) break;
 		char buff[BUFFERSIZE];
 		fputs(list[i].name, fp);
 		fputc('|', fp);
@@ -129,9 +130,9 @@ struct user* convertList()
 {
 
 
-	int scores[_LIST_ENTRYS + 1];
+	int scores[_LIST_ENTRYS + 1] = { 0 };
 
-	user list[_LIST_ENTRYS + 1] = {};
+	user list[_LIST_ENTRYS + 1] = { NULL };
 	FILE *fPointer = fopen("scoreboard.txt", "r+");
 	if (fPointer == 0) {
 		printf("Datei ist nicht vorhanden oder konnte nicht geoeffnet werden!\n");
@@ -218,14 +219,7 @@ void saveScoreToFile(int score)
 	}
 	rewind(fPointer);
 
-	//ouput scorelist to screen
-	while (!feof(fPointer)) {
-
-		fgets(singleLine, BUFFERSIZE, fPointer);
-
-		printf(singleLine);
-	}
-
+	
 	fclose(fPointer);
 	convertList();
 }

@@ -1,12 +1,12 @@
 
 #define SCROLLX 100														// width of the scrollObjects Array
 
-#include <stdio.h>														// bringt Ein/Ausgabefunktionen mit
+#include <stdio.h>														
 #include <algorithm>
 #include <ctype.h>
-#include <Windows.h>													// benötigt um die Konsole zu leern
-#include <stdlib.h>														// bringt Standardfunktionen mit
-#include <time.h>														// für Zufallszahlen benötigt
+#include <Windows.h>													
+#include <stdlib.h>														
+#include <time.h>														
 #include "graphics.h"
 #include "scorelist.h"
 #include "Obstacle.h"
@@ -14,31 +14,33 @@
 #include "player.h"
 
 /*	init
-	nimmt für das Programm
-	benötigte initialiserungen vor
+	initializes all necessary values
 */
 void init() {
-	srand(time(NULL)*clock());											// Initialisiert den Zufallszahlengenerator
-	initScreen();
+	srand(time(NULL)*clock());											// initialize random generator
+	initScreen();                                                       // initialize Screen
 	clearScreen(BACKGROUND_GREEN | FOREGROUND_RED);
-	initPlayer();
-	resetGameplayData();
+	initPlayer();                                                       // initialize Player
+	resetGameplayData();                                                // initialize gameplayData struct
 }
 
 
 
 int main() {
 	bool inGame = true;
-	HANDLE stdHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-	printf("Press any key to start, press Spacebar to jump");
-	getch();
+	HANDLE stdHandle = GetStdHandle(STD_OUTPUT_HANDLE);					//for late on/output ( handle is changed in graphics.h
+	printf("Beliebigen Knopf druecken zum starten, Leertaste zum springen!");
+	_getch();
 	init();
-	while (inGame) {
+	while (inGame) {													// main gameloop
 		gameTimer();
-		SetConsoleActiveScreenBuffer(stdHandle);
+		SetConsoleActiveScreenBuffer(stdHandle);						// reset console to standard handle
 		saveScoreToFile(gpd.score);
+		showScorelist();
+		printf("\nNochmal spielen?(y/n)");
+		char c = _getch();
+		if (c == 'n')inGame = false;
 		init();
 	}
-	_getch();
 	return 0;
 }

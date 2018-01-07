@@ -22,17 +22,19 @@ void jump() {
 	player.dy = -2;
 	player.jump = true;
 }
-
+//draws player to screen
 void drawPlayer() {
 	putPixel(PLAYER_X, player.y, ' ', BACKGROUND_BLUE);
 }
 
 void updatePlayer(float time) {
+//check keyboard input
 	if (kbhit()) {
 		char c = getch();
+//if spacebar is pressed and player is not already jumping
 		if (c == ' '&&!player.jump)jump();
 	}
-
+//update player position
 	player.y += player.dy * time;				//s(t) = v * t
 	player.dy += PLAYER_GRAV * time;			//a(t) = g * t
 	if (player.y >= HEIGHT - 1){
@@ -40,7 +42,7 @@ void updatePlayer(float time) {
 		player.jump = false;
 	}
 }
-
+//checks if player collided with an obstackle
 bool checkDead() {
 	return screen[(int)(PLAYER_X + player.y * WIDTH)].Attributes == BACKGROUND_RED;
 }

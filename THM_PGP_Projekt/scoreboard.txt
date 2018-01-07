@@ -1,5 +1,6 @@
 #########
 Name        Score
+King       |208
            |204
 Heiner     |160
 Pascal     |108
@@ -9,4 +10,3 @@ Heiner     |47
 TV         |26
            |20
 Gonga      |16
-Pascal1    |14

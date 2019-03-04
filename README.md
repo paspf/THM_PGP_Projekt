@@ -1,3 +1,3 @@
 # THM_PGP_Projekt
 
-Einfach zum Github Testen
+Ein einfacher Sidescroller in der Konsole. Entwickelt für das Modul Einführung in die Programmierung.
